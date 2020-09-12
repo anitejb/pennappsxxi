@@ -2,8 +2,8 @@ import re
 import nltk.corpus
 from nltk.corpus import nps_chat
 
-class IsQuestion():
 
+class IsQuestion():
     # Init constructor
     def __init__(self):
         posts = self.__get_posts()

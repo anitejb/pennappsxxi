@@ -43,15 +43,3 @@ def update_result(new_topic, new_question):
         })
 
 # update_result([{'topic': 'green gas emission'}], [{"question": 'Is the earth round?', "question_type": 'YN'}])
-
-def stream_handler(event):
-    messages = event['data']
-    for key in messages:
-        message = messages[key]
-        text, timestamp = message['text'], message['timestamp']
-        print(f'{text} : {timestamp}')
-        # call NLP to update results
-
-def start_event_stream():
-    my_stream = db.child("audio-chunks").stream(stream_handler)
-    return my_stream

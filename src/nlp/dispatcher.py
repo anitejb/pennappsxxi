@@ -1,4 +1,4 @@
-from question_identifier import IsQuestion
+from .question_identifier import IsQuestion
 from db.db import update_result
 
 
@@ -11,7 +11,6 @@ class Dispatcher:
         new_topic = self.identify_new_topic()
         update_result(new_topic, new_question)
 
-
     def identify_new_question_phrase(self):
         text, timestamp = record['text'], record['timestamp']
         is_question = self.question_identifier.predict_question()
@@ -23,3 +22,7 @@ class Dispatcher:
 
     def identify_new_topic(self):
         return []
+
+    def process_nlp(self, event):
+        # print(event)
+        pass
