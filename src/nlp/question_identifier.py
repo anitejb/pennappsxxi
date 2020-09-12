@@ -89,13 +89,3 @@ class IsQuestion():
             return 'YN'
         else:
             return 'unknown'
-
-
-# isQ = IsQuestion()
-# result = isQ.predict_question("is this a good question")
-# print(result)
-
-# df_1 = pd.read_csv('queries-10k-txt', sep='\t')
-# df_1['is_question'] = df_1['QUERY'].apply(isQ.predict_question)
-# df_1['question_type'] = df_1[df_1['is_question'] == 1]['QUERY'].apply(isQ.predict_question_type)
-# df_1.to_csv('output/method2_output.csv', index=False)
