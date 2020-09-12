@@ -11,7 +11,7 @@ def stream_handler(event):
         # text, timestamp = message['text'], message['timestamp']
         # print(f'{text} : {timestamp}')
         # call NLP to update results
-        dispatcher.process_nlp(message)
+        dispatcher.update_result(message)
 
 def start_event_stream():
     my_stream = db.child("audio-chunks").stream(stream_handler)
