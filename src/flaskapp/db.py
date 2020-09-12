@@ -1,3 +1,4 @@
+import os
 import pyrebase
 
 firebase_config = {
@@ -11,8 +12,8 @@ firebase = pyrebase.initialize_app(firebase_config)
 
 db = firebase.database()
 
-def get_all_texts():
-    users = db.child("users").get().val()
-    for user in users:
-        print(user, users[user])
-    return {"texts" : users}
+def push_to_audio_chunks(value):
+    db.child("audio-chunks").child(time.time()).push(value)
+
+def push_to_results(value):
+    db.child("results").child(time.time()).push(value)
