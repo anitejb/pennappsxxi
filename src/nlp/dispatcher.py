@@ -22,7 +22,3 @@ class Dispatcher:
 
     def identify_new_topic(self):
         return []
-
-    def process_nlp(self, event):
-        # print(event)
-        pass
