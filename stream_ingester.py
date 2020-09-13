@@ -8,10 +8,10 @@ import signal
 
 
 config = {
-  "apiKey": os.environ['FIREBASE_API_KEY'],
-  "databaseURL": os.environ['FIREBASE_DB_URL'],
-  "authDomain": "",
-  "storageBucket": ""
+  "apiKey": os.getenv('FIREBASE_API_KEY'),
+  "authDomain": f'{os.getenv("FIREBASE_PROJECT_ID")}.firebaseapp.com',
+  "databaseURL": f'https://{os.getenv("FIREBASE_PROJECT_ID")}.firebaseio.com',
+  "storageBucket": f'{os.getenv("FIREBASE_PROJECT_ID")}.appspot.com'
 }
 firebase = pyrebase.initialize_app(config)
 db = firebase.database()
@@ -22,7 +22,7 @@ def process_chunks():
         filename = '/Users/tianyizhang/Downloads/pennappsxxi/' + file
         try:
             result = speech_to_text(filename)
-        except ValueError:
+        except ValueError as e:
             # incomplete chuncks not ready to read for now
             continue
 
@@ -32,14 +32,16 @@ def process_chunks():
             timestamp = time.time()
             # data to save
             data = {
-                "text": text
+                "text": text,
+                "timestamp": timestamp
             }
             # Pass the user's idToken to the push method
-            results = db.child("audio-chunks").child(timestamp).push(data)
+            results = db.child("audio-chunks").child(int(time.time())).push(data)
         else:
             print(f'Unable to transcribe: {result["error"]}')
         os.remove(filename)
     time.sleep(10)
+
 
 def remove_chunk_files():
     for file in glob.glob("*.wav"):
