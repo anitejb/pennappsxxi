@@ -27,7 +27,9 @@ class Dispatcher:
 
     def identify_new_topic(self, record):
         text, timestamp = record['text'], record['timestamp']
-        return self.lda.load_model(text)
+        if text:
+            return self.lda.load_model(text)
+        return []
 
     def identify_wolfram_question(self, record):
         text, timestamp = record['text'], record['timestamp']
@@ -36,3 +38,4 @@ class Dispatcher:
             question = text[text.index(self.wolfram.STOP_WORD) + len(self.wolfram.STOP_WORD):]
             return [self.wolfram.get_query_url(question)]
         return []
+q
