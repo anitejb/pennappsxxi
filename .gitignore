@@ -8,3 +8,6 @@ venv/
 # Config
 config.py
 setup.sh
+
+# Firebase
+firebase-creds.json

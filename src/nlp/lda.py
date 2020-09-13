@@ -1,5 +1,7 @@
 import re
 
+from .wolfram import Wolfram
+
 from gensim.models.ldamodel import LdaModel
 from gensim.models import LdaMulticore
 from gensim.test.utils import common_texts
@@ -10,6 +12,8 @@ import nltk
 # nltk.download("averaged_perceptron_tagger")
 # nltk.download("stopwords")
 # nltk.download("wordnet")
+# nltk.download("nps_chat")
+# nltk.download("punkt")
 from nltk.corpus import stopwords
 from nltk.corpus import wordnet
 from nltk.stem.wordnet import WordNetLemmatizer
@@ -17,6 +21,7 @@ from nltk.stem.wordnet import WordNetLemmatizer
 #stop_words
 stop_words = stopwords.words("english")
 stop_words += ["word", "list", "let", "put"]
+stop_words.append(Wolfram().STOP_WORD)
 
 # Preprocess
 
@@ -60,22 +65,22 @@ class LDA:
                     doc_out.append(lemmatized_word)
             else:
                 continue
-        return [doc_out]
+        return doc_out
 
 
     # Feed to model
     def load_model(self, phrase):
         processed_phrase = self.preprocessing(phrase)
 
-        self.all_phrases += processed_phrase
-
+        self.all_phrases.append(processed_phrase)
+        # print(self.all_phrases)
+        # dct = Dictionary(common_texts)
         dct = Dictionary(self.all_phrases)
         corpus = [dct.doc2bow(line) for line in self.all_phrases]
-
         lda_model = LdaMulticore(corpus=corpus,
                                 id2word=dct,
                                 random_state=100,
-                                num_topics=10,
+                                num_topics=3,
                                 passes=10,
                                 chunksize=1000,
                                 batch=False,
@@ -90,8 +95,8 @@ class LDA:
 
         topic_keywords = []
         topics = lda_model.print_topics(-1)
-        # print(topics)
-        for topic in topics[:5]:
+
+        for topic in topics[:3]:
             topics_str = topic[1]
             pattern = r"[^a-zA-Z+]"
             topics_list = re.sub(pattern, "", topics_str).split("+")
@@ -102,13 +107,12 @@ class LDA:
 # Testing
 if __name__ == "__main__":
     lda = LDA()
-    phrase1 = "Today we're going to talk about memory. It is the study of the the brain."
+    phrase1 = "What's up, guys? Welcome back to the Harvard Un..."
     topic_keywords = lda.load_model(phrase1)
-    print(topic_keywords)
-    phrase2 = '''In the last section, we examined some early aspects of memory. In this section, what we’re going to do is discuss some factors that influence memory. So let’s do that by beginning with the concept on slide two, and that concept is overlearning. Basically in overlearning, the idea is that you continue to study something after you can recall it perfectly. So you study some particular topic whatever that topic is. When you can recall it perfectly, you continue to study it.
-This is a classic way to help when one is taking comprehensive finals later in the semester. So when you study for exam one and after you really know it all, you continue to study it. That'''
+    # print(topic_keywords)
+    phrase2 = "You wouldn't happen to know where the building ..."
     topic_keywords = lda.load_model(phrase2)
-    print(topic_keywords)
+    # print(topic_keywords)
 
 # [
 #     (0, "0.034*"recall" + 0.022*"learn" + 0.016*"slide" + 0.014*"well" + 0.012*"one" + 0.011*"take" + 0.011*"first" + 0.011*"call" + 0.011*"try" + 0.010*"show""),
