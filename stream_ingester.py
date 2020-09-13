@@ -41,7 +41,7 @@ def process_chunks():
         else:
             print(f'Unable to transcribe: {result["error"]}')
         os.remove(filename)
-    time.sleep(10)
+    time.sleep(1)
 
 
 def remove_chunk_files():

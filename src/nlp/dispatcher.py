@@ -8,15 +8,16 @@ class Dispatcher:
         self.lda = LDA()
 
     def update_result(self, record):
+        # print(record)
         new_question = self.identify_new_question_phrase(record)
         new_topic = self.identify_new_topic(record)
         update_result(new_topic, new_question)
 
     def identify_new_question_phrase(self, record):
         text, timestamp = record['text'], record['timestamp']
-        is_question = True if self.question_identifier.predict_question() == 1 else False
+        is_question = bool(self.question_identifier.predict_question(text))
         if is_question:
-            question_type = self.question_identifier.predict_question_type()
+            question_type = self.question_identifier.predict_question_type(text)
             return [{"question": text, "question_type": question_type}]
 
         return []

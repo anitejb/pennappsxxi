@@ -28,9 +28,8 @@ def update_result(new_topic, new_question):
             key = e.key()
 
     if entry:
-        print(entry)
-        topics = entry['topics']
-        questions = entry['questions']
+        topics = entry.get('topics', [])
+        questions = entry.get('questions', [])
         updated_result = {
             'topics': topics + new_topic,
             'questions': questions + new_question
