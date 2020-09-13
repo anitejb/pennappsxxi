@@ -22,8 +22,9 @@ def process_chunks():
         filename = '/Users/tianyizhang/Downloads/pennappsxxi/' + file
         try:
             result = speech_to_text(filename)
-        except ValueError as e:
+        except Exception as e:
             # incomplete chuncks not ready to read for now
+            print(e)
             continue
 
         if result['message'] == 'success':
@@ -36,7 +37,7 @@ def process_chunks():
                 "timestamp": timestamp
             }
             # Pass the user's idToken to the push method
-            results = db.child("audio-chunks").child(int(time.time())).push(data)
+            results = db.child("audio-chunks").push(data)
         else:
             print(f'Unable to transcribe: {result["error"]}')
         os.remove(filename)
@@ -55,6 +56,6 @@ if __name__ == "__main__":
         while True:
             process_chunks()
     finally:
-        os.killpg(0, signal.SIGKILL) # kill all processes in my group
         remove_chunk_files()
+        os.killpg(0, signal.SIGKILL) # kill all processes in my group
 
