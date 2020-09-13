@@ -1,10 +1,11 @@
 from .question_identifier import IsQuestion
 from db.db import update_result
-
+from .lda import LDA
 
 class Dispatcher:
     def __init__(self):
         self.question_identifier = IsQuestion()
+        self.lda = LDA()
 
     def update_result(self, record):
         new_question = self.identify_new_question_phrase(record)
@@ -21,4 +22,5 @@ class Dispatcher:
         return []
 
     def identify_new_topic(self, record):
-        return []
+        text, timestamp = record['text'], record['timestamp']
+        return self.lda.load_model(text)
